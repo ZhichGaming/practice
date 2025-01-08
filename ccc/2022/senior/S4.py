@@ -7,5 +7,7 @@ for p in map(int, input().split()):
 
 prefix_sum = [points[0]]
 
-for i in range(len(points)):
-    prefix_sum[i] += 
+for i in range(1, len(points)):
+    prefix_sum.append(prefix_sum[i - 1] + points[i])
+
+
