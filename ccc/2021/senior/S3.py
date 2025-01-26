@@ -1,4 +1,4 @@
-
+'''
 N = int(input())
 friends = []
 vertices = []
@@ -53,3 +53,50 @@ while left <= right:
         left = mid + 1
          
 print(score)
+'''
+
+N = int(input())
+friends = []
+
+l = float("inf")
+r = 0
+
+for _ in range(N):
+    P, W, D = map(int, input().split())
+
+    friends.append((P, W, D))
+
+    l = min(l, P)
+    r = max(r, P)
+
+def findTime(c):
+    total = 0
+
+    for P, W, D in friends:
+        if P - D <= c and c <= P + D:
+            continue
+
+        total += W * max(abs(c - P) - D, 0)
+    
+    return total
+
+cost = 0
+
+while l <= r:
+    center_index = (l + r) // 2
+
+    cost = findTime(center_index)
+    cost_left = findTime(center_index - 1)
+    cost_right = findTime(center_index + 1)
+
+
+    if (cost < cost_left and cost < cost_right) or cost == cost_left or cost == cost_right:
+        break
+
+    if cost < cost_right:
+        r = center_index 
+    elif cost < cost_left:
+        l = center_index 
+
+print(cost)
+
