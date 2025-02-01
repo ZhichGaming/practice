@@ -17,11 +17,13 @@ def getTreeCount(weight):
     
 
     while each_weight > 0:
-        # print(subtrees, each_weight)
+        # we are substracting because we aren't counting the weights but rather the number of possibilities we skipped by doing weight -1
         res += getTreeCount(each_weight) * (subtrees - last_subtree)
 
         last_subtree = subtrees
-        each_weight -= 1
+        # This skips weights, but that is fine because we only want the possibilities of the maximum weights.
+        each_weight = weight // (subtrees + 1)
+        # each_weight -= 1
 
         if each_weight <= 0:
             break
