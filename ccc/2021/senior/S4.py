@@ -1,4 +1,5 @@
 from collections import deque
+import heapq
 
 # MARK: Inputs
 n, w, d = map(int, input().split())
@@ -41,9 +42,36 @@ def getStationDistance(station):
 def getWalkingDistance(station):
     return walk_dist[station]
 
+heap = []
+
+for i in range(1, n + 1):
+    # if stations[i] == n:
+    #     heapq.heappush(heap, (i, i))
+    #     continue
+    if walk_dist[stations[i]] == float("inf"):
+        continue
+
+    heapq.heappush(heap, (i - 1 + walk_dist[stations[i]], i))
+
 # MARK: Swaps
 for i in range(d):
     swap = swaps[i]
     stations[swap[0]], stations[swap[1]] = stations[swap[1]], stations[swap[0]]
+
+    if walk_dist[stations[swap[0]]] != float("inf"):
+        heapq.heappush(heap, (swap[0] - 1 + walk_dist[stations[swap[0]]], swap[0]))
+    if walk_dist[stations[swap[1]]] != float("inf"):
+        heapq.heappush(heap, (swap[1] - 1 + walk_dist[stations[swap[1]]], swap[1]))
+    
+    # we cannot heap pop this step because if we do so, the heap will be missing a value even if the value is up to date
+    current = heap[0][1] - 1 + walk_dist[stations[heap[0][1]]]
+
+    while current != heap[0][0]:
+        heapq.heappop(heap)
+
+        current = heap[0][1] - 1 + walk_dist[stations[heap[0][1]]]
+
+    print(current)
+
 
 
